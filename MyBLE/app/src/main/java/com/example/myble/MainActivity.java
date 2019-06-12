@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public Button pre, glu, synchronize;
     public String Alldata=" ";
     public final static String DEVICE_NAME_FORA = "FORA";  // 定翼裝置名稱，利用裝置名稱過濾不必要的藍牙設備。
-    public final static UUID FORA_SERVICE_UUID = UUID.fromString("00001523-1212-efde-1523-785feabcd123");
-    public final static UUID FORA_CHARACTERISTIC_UUID = UUID.fromString("00001524-1212-efde-1523-785feabcd123");
+    public final static UUID FORA_SERVICE_UUID = UUID.fromString("FORA廠商提供代碼");
+    public final static UUID FORA_CHARACTERISTIC_UUID = UUID.fromString("FORA廠商提供代碼");
     public final static UUID Client_Characteristic_Configuration = convertFromInteger(0x2902);
     public String userDataType = "-1";   // 設定使用者想要取得的資料屬於血糖還是血壓
                                          // 0：血糖; 1：血壓
@@ -90,14 +90,14 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
 
             switch (v.getId()) {
-                case (R.id.GLU):                   // 這邊對應到 血糖燈
+                case (R.id.GLU):                   // 這邊對應到 血糖
                     scanLeDevice(true);     // 呼叫scanLeDevice()，開始掃描
                     glu.setEnabled(false);
                     pre.setEnabled(false);
                     userDataType = "0";            //在血糖燈裡面設定使用者要取得的資料種類
                                                   // userDataType:0 表示 血糖 
                     break;
-                case (R.id.PRE):                   //這邊對應到血壓燈
+                case (R.id.PRE):                   //這邊對應到血壓
                     scanLeDevice(true);    // 呼叫scanLeDevice()，開始掃描
                     glu.setEnabled(false);
                     pre.setEnabled(false);
@@ -322,8 +322,8 @@ public class MainActivity extends AppCompatActivity {
                 BluetoothGattDescriptor descriptor = characteristic.getDescriptor(Client_Characteristic_Configuration);
                 gatt.writeDescriptor(descriptor);
             }
-            else if(this.dataAvailable == true){                                                //取值在這邊取！！！！！！！！！！！！！！！！！！！
-                if(userDataType.equals("0")){                                                   // 這個if 取得血糖！！！！！！！！！！！！！！！！！！
+            else if(this.dataAvailable == true){                                                //取值在這邊取！
+                if(userDataType.equals("0")){                                                   // 這個if 取得血糖！
                     final int Glucose = data[2] & 0xFF;
                     this.Glucose = data[2] &0xFF;
                     Log.d(TAG, "Glucose: "+String.valueOf(Glucose));
@@ -331,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
                     glucose.append(String.valueOf(Glucose));
                     time.append(this.Hour+" : "+this.Minute);
                 }
-                else if(userDataType.equals("1") ){                                             //這邊 取得血壓！！！！！！！！！！！！！！！！！！！！！！！！！
+                else if(userDataType.equals("1") ){                                             //這邊 取得血壓！！
                     final int Systolic = data[2]& 0xFF;  // & 0xff 避免數值超過128 時變成 二補數的bug  例如 129 變成 -127
                     final int Diastolic = data[4]& 0xFF;
                     this.Systolic = data[2]& 0xFF;
