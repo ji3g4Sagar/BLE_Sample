@@ -18,7 +18,7 @@
 	6. Glucose，血糖值
 	7. Time，資料時間標記
 
-# 程式說明 
+# 程式說明Part1
 ## 裝置掃描到裝置連線
 
 1. 檢測手機硬體
@@ -112,14 +112,16 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
 ```
 
-# 程式說明
+===
+
+# 程式說明Part2
 ## 連線後取測量值步驟
 
 * 邏輯：覆寫藍牙中的callbakc function，在對應的callback function中，設計要執行的功能。
 
 5. 連線後藍芽CallBack事件
 
-	i. 123 
+	i. onConnectionStateChange
 
 
 
