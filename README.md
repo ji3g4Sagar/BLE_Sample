@@ -20,7 +20,10 @@
 
 # 程式說明
 1. UI元件綁定、檢測手機硬體
+* 程式位置： onCreate()
+* 原始碼：
 ```
+// 檢查裝置是否支援BLE
 		if (!getPackageManager().hasSystemFeature
                 (PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, "硬體不支援", Toast.LENGTH_SHORT).show();
