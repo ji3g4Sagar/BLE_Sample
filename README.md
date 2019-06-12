@@ -454,6 +454,9 @@ if (gattServices == null){
             }
         }
 
+
+```
+
 # 程式說明Part3
 ## 額外function以及自定義物件
 
