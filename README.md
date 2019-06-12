@@ -176,6 +176,14 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 		+ gatt: 藍芽連線物件
 		+ descriptor：藍芽descriptor物件，可以在這個callback中做對應操作
 		+ status: Function執行是否成功，[注意：0表示成功]
+	* 程式邏輯：
+		a. 首先先確定資料是否存在，存在則取得資料筆數，不存在將裝置關機
+			- this.hasGetDataNum == false
+			- this.dataNotExist == true
+		b. 再來取得資料的種類、資料時間戳記
+			- this.dataAvailable == false
+		c. 最後取值
+			- this.dataAvailable == true
 
 	*原始碼：
 	``` 
@@ -184,7 +192,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
     Log.d(TAG, "Write the descriptor successfully");
     BluetoothGattCharacteristic Char = gatt.getService(FORA_SERVICE_UUID).getCharacteristic(FORA_CHARACTERISTIC_UUID);
     byte [] arrayOfByte = new byte[8];
-    if(this.hasGetDataNum == false){
+    if(this.hasGetDataNum == false){  
         arrayOfByte [0] = (byte) 0x51;  // 起始信號
         arrayOfByte [1] = (byte) 0x2B;  // 取得資料筆數代碼
         arrayOfByte [2] = (byte) 0x01;  // 表示第幾個使用者
@@ -212,7 +220,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
         arrayOfByte [5] = (byte) 0x01;  // 0x1對 0x26來說表示取使用者1的資料
         arrayOfByte [6] = (byte) 0xA3;  // 結束信號
     }
-    else if(dataAvailable == true){
+    else if(this.dataAvailable == true){
         arrayOfByte [0] = (byte) 0x51;  // 起始信號
         arrayOfByte [1] = (byte) 0x26;  // 血糖、血壓數值代碼
         arrayOfByte [2] = this.whichdataIndex;  // 2、3為表示為0 表示取最後一筆
@@ -239,8 +247,98 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
     ````
 
+    iv. onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic)
+	* 觸發時機： 每當有任何藍牙物件(gatt)呼叫discoverServices()
+	* 參數意義：
+		+ gatt: 藍芽連線物件
+		+ status: Function執行是否成功，[注意：0表示成功]
+
+	*原始碼：
+	```
+
+	gatt.setCharacteristicNotification(characteristic, true);
+            byte[] data = characteristic.getValue();
+            Log.d(TAG, String.valueOf(data[0]&0xFF));
+            Log.d(TAG, String.valueOf(data[1]&0xFF));
+            Log.d(TAG, String.valueOf(data[2]&0xFF));
+            Log.d(TAG, String.valueOf(data[3]&0xFF));
+            Log.d(TAG, String.valueOf(data[4]&0xFF));
+            Log.d(TAG, String.valueOf(data[5]&0xFF));
+            Log.d(TAG, String.valueOf(data[6]&0xFF));
+            Log.d(TAG, String.valueOf(data[7]&0xFF));
+            if(this.hasGetDataNum == false){
+                int Num = data[2]& 0xFF;
+                Log.d(TAG, "NUMBER"+String.valueOf(Num));
+                if(Num==0){
+                    this.dataNotExist = true;
+                }
+                else{
+                    this.hasGetDataNum = true;
+                    this.dataNum = Num;
+                }
+                BluetoothGattDescriptor descriptor = characteristic.getDescriptor(Client_Characteristic_Configuration);
+                gatt.writeDescriptor(descriptor);
+            }
+            else if(this.dataAvailable == false){
+                Log.d(TAG, String.valueOf(data[1])+ String.valueOf(data[3]));
+                Log.d(TAG, "dataNUm: "+String.valueOf(this.dataNum));
+                if(this.getDataTime <= this.dataNum){
+                    String dataForDataTypeAndMinute =
+                            addZero(Integer.toBinaryString(Integer.parseInt(Integer.toHexString(data[4]&0xFF), 16)), 8);
+                    String dataForHour =
+                            addZero(Integer.toBinaryString(Integer.parseInt(Integer.toHexString(data[5]&0xFF), 16)), 8);
+                    this.dataType = dataForDataTypeAndMinute.substring(0,1);
+                    this.Minute = Integer.valueOf(dataForDataTypeAndMinute.substring(2,8),2).toString();
+                    this.Hour = Integer.valueOf(dataForHour.substring(3,8),2).toString();
+                    Log.d(TAG, "Hour"+this.Hour);
+                    Log.d(TAG, "Minute: "+this.Minute);
+                    Log.d(TAG, "First bit: "+this.dataType);  // 0: 血糖; 1:血壓.
+                    Log.d(TAG, "Userdatatype: "+userDataType); //userDataType 表示使用者要求的資料格式
+
+                    if(userDataType.equals(this.dataType)){
+                        this.dataAvailable = true;
+                    }
+                    else{
+                        this.whichdataIndex = (byte) (this.whichdataIndex +1) ;
+                        this.getDataTime ++;
+                    }
+                    Log.d(TAG, "INDEX");
+                    System.out.println(this.whichdataIndex);
+                }
+                BluetoothGattDescriptor descriptor = characteristic.getDescriptor(Client_Characteristic_Configuration);
+                gatt.writeDescriptor(descriptor);
+            }
+            else if(this.dataAvailable == true){                                                //取值在這邊取！
+                if(userDataType.equals("0")){                                                   // 這個if 取得血糖！
+                    final int Glucose = data[2] & 0xFF;
+                    this.Glucose = data[2] &0xFF;
+                    Log.d(TAG, "Glucose: "+String.valueOf(Glucose));
+                    Alldata = Alldata + "[" + String.valueOf(Glucose) + "]";
+                    glucose.append(String.valueOf(Glucose));
+                    time.append(this.Hour+" : "+this.Minute);
+                }
+                else if(userDataType.equals("1") ){                                             //這邊 取得血壓！！
+                    final int Systolic = data[2]& 0xFF;  // & 0xff 避免數值超過128 時變成 二補數的bug  例如 129 變成 -127
+                    final int Diastolic = data[4]& 0xFF;
+                    this.Systolic = data[2]& 0xFF;
+                    this.Diastolic = data[4]&0xFF;
+                    Log.d(TAG, "Systolic: " + String.valueOf(Systolic));  //Systolic
+                    Log.d(TAG, "Diastolic: " + String.valueOf(Diastolic));  //Diastolic
+                    Alldata = Alldata+ "["+String.valueOf(Systolic)+", "+String.valueOf(Diastolic)+"] ";
+                    systolic.append(String.valueOf(Systolic));
+                    diastolic.append(String.valueOf(Diastolic));
+                    time.append(this.Hour+" : "+this.Minute);
+                }
+                disconnection(gatt, this);
+            }
+            else{
+                Log.d(TAG, "找不到對應資料！！！！");
+            }
 
 
+
+00001523-1212-efde-1523-785feabcd123
+00001524-1212-efde-1523-785feabcd123
 
 
 

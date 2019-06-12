@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public Button pre, glu, synchronize;
     public String Alldata=" ";
     public final static String DEVICE_NAME_FORA = "FORA";  // 定翼裝置名稱，利用裝置名稱過濾不必要的藍牙設備。
-    public final static UUID FORA_SERVICE_UUID = UUID.fromString("FORA廠商提供代碼");
-    public final static UUID FORA_CHARACTERISTIC_UUID = UUID.fromString("FORA廠商提供代碼");
+    public final static UUID FORA_SERVICE_UUID = UUID.fromString("00001523-1212-efde-1523-785feabcd123");
+    public final static UUID FORA_CHARACTERISTIC_UUID = UUID.fromString("00001524-1212-efde-1523-785feabcd123");
     public final static UUID Client_Characteristic_Configuration = convertFromInteger(0x2902);
     public String userDataType = "-1";   // 設定使用者想要取得的資料屬於血糖還是血壓
                                          // 0：血糖; 1：血壓
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
                     arrayOfByte [6] = (byte) 0xA3;  // 結束信號
 
                 }
-                else if(dataAvailable == true){
+                else if(this.dataAvailable == true){
                     arrayOfByte [0] = (byte) 0x51;  // 起始信號
                     arrayOfByte [1] = (byte) 0x26;  // 血糖、血壓數值代碼
                     arrayOfByte [2] = this.whichdataIndex;  // 2、3為表示為0 表示取最後一筆
