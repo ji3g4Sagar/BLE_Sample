@@ -196,10 +196,10 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
 			- this.dataAvailable == true
 
-		**** 每個階段（if-else）結束都會對gatt.characteristic寫入指令，如：
+		#### 每個階段（if-else）結束都會對gatt.characteristic寫入指令，如：
 
-		Char.setValue(arrayOfByte);
-        boolean result = gatt.writeCharacteristic(Char);
+			Char.setValue(arrayOfByte);
+        	boolean result = gatt.writeCharacteristic(Char);
 
         藉此處發onCharacteristicChanged 這個callback function
 
