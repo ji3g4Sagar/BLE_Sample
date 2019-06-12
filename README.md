@@ -118,7 +118,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 * 邏輯：覆寫藍牙中的callbakc function，在對應的callback function中，設計要執行的功能。
 
 5. 連線後藍芽CallBack事件
-	1. 
+	i. 123 
 
 
 
