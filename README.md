@@ -269,21 +269,78 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 	* 觸發時機： 每當有任何藍牙物件(gatt)呼叫discoverServices()
 	* 參數意義：
 		+ gatt: 藍芽連線物件
-		+ status: Function執行是否成功，[注意：0表示成功]
+		+ characteristic： 實際上存放不同資料數值的藍芽物件，利用characteristic.getvalue()取值
+
+	* 程式邏輯：
+		### 利用boolean值判斷連線取值的階段，將不同階段取回來的值（資料筆數、資料類型等等）用以判斷是否要將該階段對應的boolean值改變，分成以下四個階段
+		#### 請各階段下的「判斷式」（如this.hasGetDataNum == false ），對應原始碼中，if-else內的指令。
+
+		a. 利用getvalue()取得實際資料
+
+			- byte[] data = characteristic.getValue();			
+			
+		b. 判斷資料是否存在
+
+			- 資料不存在，把dataNotExist 設為true
+
+				if(Num==0){
+                    this.dataNotExist = true;
+                }
+
+			- 存在，把hasGetDataNum 設為true
+
+				else{
+                    this.hasGetDataNum = true;
+                    this.dataNum = Num;
+                }
+
+		c. 再來取得資料的種類、資料時間戳記
+
+			- String dataForDataTypeAndMinute =
+                            addZero(Integer.toBinaryString(Integer.parseInt(Integer.toHexString(data[4]&0xFF), 16)), 8);
+                    String dataForHour =
+                            addZero(Integer.toBinaryString(Integer.parseInt(Integer.toHexString(data[5]&0xFF), 16)), 8);
+                    this.dataType = dataForDataTypeAndMinute.substring(0,1);
+                    this.Minute = Integer.valueOf(dataForDataTypeAndMinute.substring(2,8),2).toString();
+                    this.Hour = Integer.valueOf(dataForHour.substring(3,8),2).toString();
+
+            - 若資料和使用者要求的資料(userDataType)相同，則把 dataAvailable 改為true
+
+		d. 最後取值
+
+			- 對應使用者要求的資料型態（血壓or血糖）
+
+			-  血糖                                               
+                final int Glucose = data[2] & 0xFF;
+                this.Glucose = data[2] &0xFF;
+                Log.d(TAG, "Glucose: "+String.valueOf(Glucose));
+                Alldata = Alldata + "[" + String.valueOf(Glucose) + "]";
+                glucose.append(String.valueOf(Glucose));
+                time.append(this.Hour+" : "+this.Minute);
+
+            - 血壓                                              
+                final int Systolic = data[2]& 0xFF;  // & 0xff 避免數值超過128 時變成 二補數的bug  例如 129 變成 -127
+                final int Diastolic = data[4]& 0xFF;
+                this.Systolic = data[2]& 0xFF;
+                this.Diastolic = data[4]&0xFF;
+                Log.d(TAG, "Systolic: " + String.valueOf(Systolic));  //Systolic
+                Log.d(TAG, "Diastolic: " + String.valueOf(Diastolic));  //Diastolic
+                Alldata = Alldata+ "["+String.valueOf(Systolic)+", "+String.valueOf(Diastolic)+"] ";
+                systolic.append(String.valueOf(Systolic));
+                diastolic.append(String.valueOf(Diastolic));
+                time.append(this.Hour+" : "+this.Minute);
+
+		#### 每個階段（if-else）結束都會對gatt.characteristic寫入指令，如：
+
+			Char.setValue(arrayOfByte);
+        	boolean result = gatt.writeCharacteristic(Char);
+
+        藉此處發onCharacteristicChanged 這個callback function
 
 	*原始碼：
 	```
 
 	gatt.setCharacteristicNotification(characteristic, true);
-            byte[] data = characteristic.getValue();
-            Log.d(TAG, String.valueOf(data[0]&0xFF));
-            Log.d(TAG, String.valueOf(data[1]&0xFF));
-            Log.d(TAG, String.valueOf(data[2]&0xFF));
-            Log.d(TAG, String.valueOf(data[3]&0xFF));
-            Log.d(TAG, String.valueOf(data[4]&0xFF));
-            Log.d(TAG, String.valueOf(data[5]&0xFF));
-            Log.d(TAG, String.valueOf(data[6]&0xFF));
-            Log.d(TAG, String.valueOf(data[7]&0xFF));
             if(this.hasGetDataNum == false){
                 int Num = data[2]& 0xFF;
                 Log.d(TAG, "NUMBER"+String.valueOf(Num));
