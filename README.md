@@ -19,8 +19,8 @@
 	7. Time，資料時間標記
 
 # 程式說明
-1. UI元件綁定、檢測手機硬體
-* 程式位置： onCreate()
+1. 檢測手機硬體
+* 原始碼位置： onCreate()
 * 原始碼：
 ```
 
@@ -37,6 +37,13 @@ if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
 			BluetoothAdapter.ACTION_REQUEST_ENABLE);
 	startActivityForResult(enableBluetooth, REQUEST_ENABLE_BT);
 }
+
+```
+2. UI元件綁定
+* 原始碼位置： onCreate()
+* 原始碼：
+```
+
 systolic = (TextView) findViewById(R.id.systolic_value);
 diastolic = (TextView) findViewById(R.id.diastolic_value);
 glucose = (TextView) findViewById(R.id.glucose_value);
@@ -50,5 +57,75 @@ synchronize.setOnClickListener(btn);
 glu.setOnClickListener(btn);
 
 ```
+
+3. 呼叫掃描功能以及後續連線
+* 原始碼位置： scanLeDevice(final boolean enable)
+* 原始碼：
+```
+
+if (enable) {
+    mHandler.postDelayed(new Runnable() { //利用SCAN_PERIOD設定裝置掃描的時間，掃描結束後對掃描得到的裝置進行連線
+        @Override
+        public void run() {  
+            mBluetoothAdapter.stopLeScan(mLeScanCallback); // 開始連線後利用stopLeScan，停止掃描週邊裝置
+            ExecutorService executor = Executors.newFixedThreadPool(5);  //建立工作pool
+            for (int i=0;i<deviceList.size();i++){
+           		// 利用deviceList中存放的 mac address 建立BluetoothDevice物件
+                final BluetoothDevice tempdevice = mBluetoothAdapter.getRemoteDevice(deviceList.get(i)); 
+                //為每一個deviceList中儲存的BluetoothDevice物件建立一條thread，各別去做connectGatt的動作
+                ConnThread t = new ConnThread(tempdevice, mGattCallback, getApplicationContext());
+                Thread runningThread = new Thread(t);
+                executor.execute(runningThread);
+            }
+            executor.shutdown(); //表示executor不再接收新的job
+            while(!executor.isTerminated()){ //等待每一條連線的thread 執行完成
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG, "Waitting for other thread!");
+            }
+        }
+    }, SCAN_PERIOD);
+    mBluetoothAdapter.startLeScan(mLeScanCallback); // 上面的postDelayed() 在SCAN_PERIOD 的秒數到之前，優先執行這行，掃描週邊裝置
+}
+else {
+    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+}
+
+```
+
+4. 掃描週邊裝置
+* 原始碼位置： mLeScanCallback
+* 原始碼：
+```
+
+if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //檢查掃描到的裝置名稱是否為空以及裝置是否已經是否已經儲存過
+    if(device.getName().contains(DEVICE_NAME_FORA)){   // 利用裝置名稱，過濾非FORA的裝置
+        Log.d(TAG,"BLE device : " + device.getName());
+        deviceList.add(device.getAddress()); // 把所有掃描到的裝置存放在 deviceList這個ArrayList中
+    }
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
