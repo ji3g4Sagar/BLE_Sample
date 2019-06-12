@@ -119,7 +119,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
 * 邏輯：覆寫藍牙中的callbakc function，在對應的callback function中，設計要執行的功能。
 
-5. 連線後藍芽CallBack事件
+1. 連線後藍芽CallBack事件
 
 	i. onConnectionStateChange(BluetoothGatt gatt, int status, int newState)
 	* 觸發時機： 每當有任何裝置連線狀態改變。
@@ -127,6 +127,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 		+ gatt: 藍芽連線物件
 		+ status: Function 執行是否成功，0表示成功
 		+ newState: 連線狀態
+		
 	*原始碼：
 	```
 
@@ -149,6 +150,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 	* 參數意義：
 		+ gatt: 藍芽連線物件
 		+ status: Function執行是否成功，0表示成功
+
 	*原始碼：
 	```
 
