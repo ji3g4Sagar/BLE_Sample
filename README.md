@@ -177,19 +177,31 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 		+ descriptor：藍芽descriptor物件，可以在這個callback中做對應操作
 		+ status: Function執行是否成功，[注意：0表示成功]
 	* 程式邏輯：
+		### 利用boolean值判斷連線取值的階段，對應不同的階段，對gatt.characteristic物件寫入不同的指令，分成以下四個階段
+		#### 請各階段下的「判斷式」（如this.hasGetDataNum == false ），對應原始碼中，if-else內的指令。
 
-		a. 首先先確定資料是否存在，存在則取得資料筆數，不存在將裝置關機
+		a. 首先先取得藍牙裝置的資料筆數
 
-			- this.hasGetDataNum == false
+			- this.hasGetDataNum == false 
+			
+		b.  若資料筆數為零，將藍牙裝置關機
+
 			- this.dataNotExist == true
 
-		b. 再來取得資料的種類、資料時間戳記
+		c. 再來取得資料的種類、資料時間戳記
 
 			- this.dataAvailable == false
 
-		c. 最後取值
-		
+		d. 最後取值
+
 			- this.dataAvailable == true
+
+		**** 每個階段（if-else）結束都會對gatt.characteristic寫入指令，如：
+
+		Char.setValue(arrayOfByte);
+        boolean result = gatt.writeCharacteristic(Char);
+
+        藉此處發onCharacteristicChanged 這個callback function
 
 	*原始碼：
 	``` 
@@ -342,9 +354,6 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
             }
 
 
-
-00001523-1212-efde-1523-785feabcd123
-00001524-1212-efde-1523-785feabcd123
 
 
 
