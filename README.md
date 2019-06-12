@@ -121,7 +121,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
 1. 連線後藍芽CallBack事件
 
-	i. onConnectionStateChange(BluetoothGatt gatt, int status, int newState)
+	## i. onConnectionStateChange(BluetoothGatt gatt, int status, int newState)
 	* 觸發時機： 每當有任何裝置連線狀態改變。
 	* 參數意義：
 		+ gatt: 藍芽連線物件
@@ -145,7 +145,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
 	```
 
-	ii. onServicesDiscovered(BluetoothGatt gatt, int status)
+	## ii. onServicesDiscovered(BluetoothGatt gatt, int status)
 	* 觸發時機： 每當有任何藍牙物件(gatt)呼叫discoverServices()
 	* 參數意義：
 		+ gatt: 藍芽連線物件
@@ -169,7 +169,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
     ```
 
-    iii. onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status)
+    ## iii. onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status)
     * 觸發時機： 每當有任何的gatt.descriptor的物件被寫入 
     例如這句：gatt.writeDescriptor(descriptor);
 	* 參數意義：
@@ -265,7 +265,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
     ````
 
-    iv. onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic)
+    ## iv. onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic)
 	* 觸發時機： 每當有任何藍牙物件(gatt)呼叫discoverServices()
 	* 參數意義：
 		+ gatt: 藍芽連線物件
