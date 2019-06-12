@@ -177,12 +177,18 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 		+ descriptor：藍芽descriptor物件，可以在這個callback中做對應操作
 		+ status: Function執行是否成功，[注意：0表示成功]
 	* 程式邏輯：
+
 		a. 首先先確定資料是否存在，存在則取得資料筆數，不存在將裝置關機
+
 			- this.hasGetDataNum == false
 			- this.dataNotExist == true
+
 		b. 再來取得資料的種類、資料時間戳記
+
 			- this.dataAvailable == false
+
 		c. 最後取值
+		
 			- this.dataAvailable == true
 
 	*原始碼：
