@@ -125,9 +125,9 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 	* 觸發時機： 每當有任何裝置連線狀態改變。
 	* 參數意義：
 		+ gatt: 藍芽連線物件
-		+ status: Function 執行是否成功，0表示成功
+		+ status: Function 執行是否成功，[注意：0表示成功]
 		+ newState: 連線狀態
-		
+
 	*原始碼：
 	```
 
@@ -146,10 +146,10 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 	```
 
 	ii. onServicesDiscovered(BluetoothGatt gatt, int status)
-	* 觸發時機： 每當有任何藍牙物件呼叫discoverServices()
+	* 觸發時機： 每當有任何藍牙物件(gatt)呼叫discoverServices()
 	* 參數意義：
 		+ gatt: 藍芽連線物件
-		+ status: Function執行是否成功，0表示成功
+		+ status: Function執行是否成功，[注意：0表示成功]
 
 	*原始碼：
 	```
@@ -169,6 +169,75 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
     ```
 
+    iii. onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status)
+    * 觸發時機： 每當有任何的gatt.descriptor的物件被寫入 
+    例如這句：gatt.writeDescriptor(descriptor);
+	* 參數意義：
+		+ gatt: 藍芽連線物件
+		+ descriptor：藍芽descriptor物件，可以在這個callback中做對應操作
+		+ status: Function執行是否成功，[注意：0表示成功]
+
+	*原始碼：
+	``` 
+
+	if(status == BluetoothGatt.GATT_SUCCESS){
+    Log.d(TAG, "Write the descriptor successfully");
+    BluetoothGattCharacteristic Char = gatt.getService(FORA_SERVICE_UUID).getCharacteristic(FORA_CHARACTERISTIC_UUID);
+    byte [] arrayOfByte = new byte[8];
+    if(this.hasGetDataNum == false){
+        arrayOfByte [0] = (byte) 0x51;  // 起始信號
+        arrayOfByte [1] = (byte) 0x2B;  // 取得資料筆數代碼
+        arrayOfByte [2] = (byte) 0x01;  // 表示第幾個使用者
+        arrayOfByte [3] = (byte) 0x00;  // 對0x2B來說，剩下index 無意義，給0x00即可
+        arrayOfByte [4] = (byte) 0x00;  //
+        arrayOfByte [5] = (byte) 0x00;  //
+        arrayOfByte [6] = (byte) 0xA3;  // 結束信號
+    }
+    else if(this.dataNotExist == true){
+        arrayOfByte [0] = (byte) 0x51;  // 起始信號
+        arrayOfByte [1] = (byte) 0x50;  // 關機 代碼
+        arrayOfByte [2] = (byte) 0x00;  // 對0x50來說 剩餘index 給0x00即可
+        arrayOfByte [3] = (byte) 0x00;  //
+        arrayOfByte [4] = (byte) 0x00;  //
+        arrayOfByte [5] = (byte) 0x00;  //
+        arrayOfByte [6] = (byte) 0xA3;  // 結束信號
+        Log.d(TAG, "找不到對應資料！！！！ 裝置即將關機");
+    }
+    else if(this.dataAvailable == false){
+        arrayOfByte [0] = (byte) 0x51;  // 起始信號
+        arrayOfByte [1] = (byte) 0x25;  // 用來判斷資料是血壓還是血糖
+        arrayOfByte [2] = this.whichdataIndex;  // 2、3為表示為0 表示取最後一筆
+        arrayOfByte [3] = (byte) 0x00;  // 同上
+        arrayOfByte [4] = (byte) 0x00;  // 對0x25來說無意義，給0x00即可
+        arrayOfByte [5] = (byte) 0x01;  // 0x1對 0x26來說表示取使用者1的資料
+        arrayOfByte [6] = (byte) 0xA3;  // 結束信號
+    }
+    else if(dataAvailable == true){
+        arrayOfByte [0] = (byte) 0x51;  // 起始信號
+        arrayOfByte [1] = (byte) 0x26;  // 血糖、血壓數值代碼
+        arrayOfByte [2] = this.whichdataIndex;  // 2、3為表示為0 表示取最後一筆
+        arrayOfByte [3] = (byte) 0x00;  // 同上
+        arrayOfByte [4] = (byte) 0x00;  // 對0x26來說無意義，給0即可
+        arrayOfByte [5] = (byte) 0x01;  // 0x1對 0x26來說表示 取使用者1的資料
+        arrayOfByte [6] = (byte) 0xA3;  // 結束信號
+    }
+    // byte[7] 為check sum
+    arrayOfByte [7] =
+            ((byte)(arrayOfByte[0] + arrayOfByte[1] +
+                    arrayOfByte[2] + arrayOfByte[3] +
+                    arrayOfByte[4] + arrayOfByte[5] +
+                    arrayOfByte[6]& 0xFF ));
+    Char.setValue(arrayOfByte);
+    boolean result = gatt.writeCharacteristic(Char);
+    //boolean result = mBluetoothGatt.writeCharacteristic(Char);
+    Log.d(TAG, "UUID"+Char.getUuid().toString());
+    Log.d(TAG, "Char write result: "+String.valueOf(result));
+    }
+    else {
+        Log.d(TAG, "Write the descriptor failed!!");
+    }
+
+    ````
 
 
 

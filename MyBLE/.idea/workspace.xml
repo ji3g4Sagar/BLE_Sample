@@ -59,15 +59,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myble/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-59">
-              <caret line="186" column="73" selection-start-line="186" selection-start-column="73" selection-end-line="186" selection-end-column="73" />
+            <state relative-caret-position="693">
+              <caret line="322" column="16" selection-start-line="322" selection-start-column="16" selection-end-line="322" selection-end-column="49" />
               <folding>
                 <element signature="method#onCreate#0;class#MainActivity#0" />
                 <element signature="method#scanLeDevice#0;class#MainActivity#0" />
                 <element signature="method#onConnectionStateChange#0;class#7251:17043" />
                 <element signature="method#onServicesDiscovered#0;class#7251:17043" />
-                <element signature="method#onDescriptorWrite#0;class#7251:17043" />
-                <element signature="method#onCharacteristicChanged#0;class#7251:17043" />
                 <element signature="method#disconnection#0;class#MainActivity#0" />
                 <element signature="method#convertFromInteger#0;class#MainActivity#0" />
                 <element signature="method#addZero#0;class#MainActivity#0" />
@@ -287,15 +285,13 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myble/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-59">
-          <caret line="186" column="73" selection-start-line="186" selection-start-column="73" selection-end-line="186" selection-end-column="73" />
+        <state relative-caret-position="693">
+          <caret line="322" column="16" selection-start-line="322" selection-start-column="16" selection-end-line="322" selection-end-column="49" />
           <folding>
             <element signature="method#onCreate#0;class#MainActivity#0" />
             <element signature="method#scanLeDevice#0;class#MainActivity#0" />
             <element signature="method#onConnectionStateChange#0;class#7251:17043" />
             <element signature="method#onServicesDiscovered#0;class#7251:17043" />
-            <element signature="method#onDescriptorWrite#0;class#7251:17043" />
-            <element signature="method#onCharacteristicChanged#0;class#7251:17043" />
             <element signature="method#disconnection#0;class#MainActivity#0" />
             <element signature="method#convertFromInteger#0;class#MainActivity#0" />
             <element signature="method#addZero#0;class#MainActivity#0" />
