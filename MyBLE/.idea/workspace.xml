@@ -65,8 +65,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myble/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
-              <caret line="343" column="61" lean-forward="true" selection-start-line="325" selection-start-column="16" selection-end-line="343" selection-end-column="61" />
+            <state relative-caret-position="47">
+              <caret line="295" column="49" lean-forward="true" selection-start-line="295" selection-start-column="49" selection-end-line="295" selection-end-column="49" />
               <folding>
                 <element signature="method#onCreate#0;class#MainActivity#0" />
                 <element signature="method#scanLeDevice#0;class#MainActivity#0" />
@@ -276,7 +276,7 @@
       <window_info id="Designer" order="6" />
       <window_info id="Capture Tool" order="7" />
       <window_info anchor="bottom" id="Run" order="0" />
-      <window_info active="true" anchor="bottom" id="Logcat" order="1" visible="true" weight="0.32970297" />
+      <window_info active="true" anchor="bottom" id="Logcat" order="1" visible="true" weight="0.2019802" />
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" />
       <window_info anchor="bottom" id="Terminal" order="4" />
@@ -297,8 +297,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myble/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="343" column="61" lean-forward="true" selection-start-line="325" selection-start-column="16" selection-end-line="343" selection-end-column="61" />
+        <state relative-caret-position="47">
+          <caret line="295" column="49" lean-forward="true" selection-start-line="295" selection-start-column="49" selection-end-line="295" selection-end-column="49" />
           <folding>
             <element signature="method#onCreate#0;class#MainActivity#0" />
             <element signature="method#scanLeDevice#0;class#MainActivity#0" />

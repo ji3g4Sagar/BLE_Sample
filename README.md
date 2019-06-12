@@ -196,7 +196,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
 			- this.dataAvailable == true
 
-		#### 每個階段（if-else）結束都會對gatt.characteristic寫入指令，如：
+		#### 每個階段（或說每個if-else）結束都會對gatt.characteristic寫入指令，如：
 
 			Char.setValue(arrayOfByte);
         	boolean result = gatt.writeCharacteristic(Char);
@@ -273,7 +273,6 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
 	* 程式邏輯：
 		### 利用boolean值判斷連線取值的階段，將不同階段取回來的值（資料筆數、資料類型等等）用以判斷是否要將該階段對應的boolean值改變，分成以下四個階段
-		#### 請各階段下的「判斷式」（如this.hasGetDataNum == false ），對應原始碼中，if-else內的指令。
 
 		a. 利用getvalue()取得實際資料
 
@@ -333,12 +332,12 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
                 diastolic.append(String.valueOf(Diastolic));
                 time.append(this.Hour+" : "+this.Minute);
 
-		#### 每個階段（if-else）結束都會對gatt.characteristic寫入指令，如：
+		#### 每個階段（if-else）結束都會對gatt.descriptor寫入，如：
 
-			Char.setValue(arrayOfByte);
-        	boolean result = gatt.writeCharacteristic(Char);
+			BluetoothGattDescriptor descriptor = characteristic.getDescriptor(Client_Characteristic_Configuration);
+            gatt.writeDescriptor(descriptor);
 
-        藉此處發onCharacteristicChanged 這個callback function
+        onDescriptorWrite 這個callback function
 
 	*原始碼：
 	```
