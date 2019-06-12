@@ -121,7 +121,51 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
 5. 連線後藍芽CallBack事件
 
-	i. onConnectionStateChange
+	i. onConnectionStateChange(BluetoothGatt gatt, int status, int newState)
+	* 觸發時機： 每當有任何裝置連線狀態改變。
+	* 參數意義：
+		+ gatt: 藍芽連線物件
+		+ status: Function 執行是否成功，0表示成功
+		+ newState: 連線狀態
+	*原始碼：
+	```
+
+    if(newState == BluetoothProfile.STATE_CONNECTED){ //連線中
+        gatt.discoverServices(); //觸發onServicesDiscovered()
+    }
+    else if(newState == BluetoothProfile.STATE_DISCONNECTED){ //斷線
+        this.dataAvailable = false;
+    }
+    else if ((status == 8 && newState == 0) || (status == 133 && newState == 0)) { //連線上有問題的地方 8代表斷開; 133是安卓的bug，需要另外處理
+        gatt.disconnect();
+        gatt.close();
+        gatt.getDevice().connectGatt(getApplicationContext(), false, mGattCallback);
+    }
+
+	```
+
+	ii. onServicesDiscovered(BluetoothGatt gatt, int status)
+	* 觸發時機： 每當有任何藍牙物件呼叫discoverServices()
+	* 參數意義：
+		+ gatt: 藍芽連線物件
+		+ status: Function執行是否成功，0表示成功
+	*原始碼：
+	```
+
+	try {  // 用sleep避免找不的service的 bug
+         Thread.sleep(300);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    if (status == BluetoothGatt.GATT_SUCCESS) {
+        Log.d(TAG, "Find service");
+        displayGattServices(gatt.getServices(), gatt);  
+    }
+    else {
+        Log.d(TAG, "onServicesDiscovered received: " + status);
+    }
+
+    ```
 
 
 

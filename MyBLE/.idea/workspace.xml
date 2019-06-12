@@ -6,9 +6,7 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14130e1a-9c6f-46eb-8ef2-50069ad65979" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
-    </list>
+    <list default="true" id="14130e1a-9c6f-46eb-8ef2-50069ad65979" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,8 +59,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myble/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="485">
-              <caret line="267" column="10" lean-forward="true" selection-start-line="267" selection-start-column="10" selection-end-line="267" selection-end-column="10" />
+            <state relative-caret-position="-59">
+              <caret line="186" column="73" selection-start-line="186" selection-start-column="73" selection-end-line="186" selection-end-column="73" />
               <folding>
                 <element signature="method#onCreate#0;class#MainActivity#0" />
                 <element signature="method#scanLeDevice#0;class#MainActivity#0" />
@@ -289,8 +287,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myble/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="485">
-          <caret line="267" column="10" lean-forward="true" selection-start-line="267" selection-start-column="10" selection-end-line="267" selection-end-column="10" />
+        <state relative-caret-position="-59">
+          <caret line="186" column="73" selection-start-line="186" selection-start-column="73" selection-end-line="186" selection-end-column="73" />
           <folding>
             <element signature="method#onCreate#0;class#MainActivity#0" />
             <element signature="method#scanLeDevice#0;class#MainActivity#0" />
