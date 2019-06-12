@@ -59,8 +59,21 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myble/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="410">
-              <caret line="152" column="5" lean-forward="true" selection-start-line="152" selection-start-column="5" selection-end-line="152" selection-end-column="5" />
+            <state relative-caret-position="402">
+              <caret line="166" column="87" lean-forward="true" selection-start-line="166" selection-start-column="87" selection-end-line="166" selection-end-column="87" />
+              <folding>
+                <element signature="method#onCreate#0;class#MainActivity#0" />
+                <element signature="method#scanLeDevice#0;class#MainActivity#0" />
+                <element signature="method#onConnectionStateChange#0;class#7251:17043" />
+                <element signature="method#onServicesDiscovered#0;class#7251:17043" />
+                <element signature="method#onDescriptorWrite#0;class#7251:17043" />
+                <element signature="method#onCharacteristicChanged#0;class#7251:17043" />
+                <element signature="method#disconnection#0;class#MainActivity#0" />
+                <element signature="method#convertFromInteger#0;class#MainActivity#0" />
+                <element signature="method#addZero#0;class#MainActivity#0" />
+                <element signature="class#MyBluetoothGattCallback#0" />
+                <element signature="class#ConnThread#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -274,8 +287,21 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/myble/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="152" column="5" lean-forward="true" selection-start-line="152" selection-start-column="5" selection-end-line="152" selection-end-column="5" />
+        <state relative-caret-position="402">
+          <caret line="166" column="87" lean-forward="true" selection-start-line="166" selection-start-column="87" selection-end-line="166" selection-end-column="87" />
+          <folding>
+            <element signature="method#onCreate#0;class#MainActivity#0" />
+            <element signature="method#scanLeDevice#0;class#MainActivity#0" />
+            <element signature="method#onConnectionStateChange#0;class#7251:17043" />
+            <element signature="method#onServicesDiscovered#0;class#7251:17043" />
+            <element signature="method#onDescriptorWrite#0;class#7251:17043" />
+            <element signature="method#onCharacteristicChanged#0;class#7251:17043" />
+            <element signature="method#disconnection#0;class#MainActivity#0" />
+            <element signature="method#convertFromInteger#0;class#MainActivity#0" />
+            <element signature="method#addZero#0;class#MainActivity#0" />
+            <element signature="class#MyBluetoothGattCallback#0" />
+            <element signature="class#ConnThread#0" />
+          </folding>
         </state>
       </provider>
     </entry>
