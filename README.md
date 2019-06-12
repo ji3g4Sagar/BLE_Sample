@@ -412,9 +412,61 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
                 Log.d(TAG, "找不到對應資料！！！！");
             }
 
+2. 顯示裝置存在的Service 
+* 原始碼位置： displayGattServices
+* 呼叫時機：onServicesDiscovered中被呼叫使用，用以找到藍牙裝置中所有可以使用的Service
+* 程式邏輯： 用for loop 遍尋所有service，找到特定的service做取值等操作
+* 原始碼：
+```
 
+if (gattServices == null){
+            Log.d(TAG, "gattService null");
+            return;
+        }
+        for (BluetoothGattService gattService : gattServices) {
+            if(gattService.getUuid().equals(FORA_SERVICE_UUID)){
+                Log.d(TAG, "Service uuid: "+ gattService.getUuid());
+                List<BluetoothGattCharacteristic> gattCharacteristics =
+                        gattService.getCharacteristics();
+                for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
+                    gatt.setCharacteristicNotification(gattCharacteristic, true);
+                    if(FORA_CHARACTERISTIC_UUID.equals(gattCharacteristic.getUuid())){
+                        Log.d(TAG, "Char uuid :"+ gattCharacteristic.getUuid());
+                        //BluetoothGattDescriptor descriptor = gattCharacteristic.getDescriptors().get(0);
+                        BluetoothGattDescriptor descriptor = gattCharacteristic.getDescriptor(Client_Characteristic_Configuration);
+                        Log.d(TAG, "!!!!DES UUID: "+descriptor.getUuid().toString());
+                        if ((gattCharacteristic.PROPERTY_NOTIFY)> 0 ){
+                            if (descriptor != null) {
+                                Log.d(TAG, "notify > 0");
+                                descriptor.setValue((BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE));
+                            }
+                        }
+                        else if((gattCharacteristic.PROPERTY_INDICATE) >0 ){
+                            Log.d(TAG, "Indicate > 0");
+                            if(descriptor != null){
+                                descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
+                            }
+                        }
+                        Boolean result = gatt.writeDescriptor(descriptor);
+                        Log.d(TAG, "Write descriptor indication result: "+result.toString());
+                    }
+                }
+            }
+        }
 
+# 程式說明Part3
+## 額外function以及自定義物件
 
+1. 數字轉UUID 
+* convertFromInteger
+
+2. 取值後補齊
+* addZero
+* 把部分取回來的數值，沒有對齊的byte，補成相同長度
+
+3. 自定義的藍芽物件
+* MyBluetoothGattCallback
+* 新增物件變數，用以判斷
 
 
 
