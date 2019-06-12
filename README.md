@@ -112,7 +112,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
 
 ```
 
-===
+***
 
 # 程式說明Part2
 ## 連線後取測量值步驟
