@@ -23,7 +23,6 @@
 * 程式位置： onCreate()
 * 原始碼：
 		```
-	
 		// 檢查裝置是否支援BLE
 		if (!getPackageManager().hasSystemFeature
                 (PackageManager.FEATURE_BLUETOOTH_LE)) {
