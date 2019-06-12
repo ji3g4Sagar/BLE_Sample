@@ -305,6 +305,9 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
                     this.Hour = Integer.valueOf(dataForHour.substring(3,8),2).toString();
 
             - 若資料和使用者要求的資料(userDataType)相同，則把 dataAvailable 改為true
+            	if(userDataType.equals(this.dataType)){
+                        this.dataAvailable = true;
+                    }
 
 		d. 最後取值
 
@@ -319,7 +322,7 @@ if(device.getName()!=null && !(deviceList.contains(device.getAddress()))){  //�
                 time.append(this.Hour+" : "+this.Minute);
 
             - 血壓                                              
-                final int Systolic = data[2]& 0xFF;  // & 0xff 避免數值超過128 時變成 二補數的bug  例如 129 變成 -127
+                final int Systolic = data[2]& 0xFF;  
                 final int Diastolic = data[4]& 0xFF;
                 this.Systolic = data[2]& 0xFF;
                 this.Diastolic = data[4]&0xFF;
